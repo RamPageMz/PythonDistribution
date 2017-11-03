@@ -57,4 +57,89 @@ scale_B = (s1_modified * s1_modified) / (s2_modified * s2_modified)
 
 print("均值差的95%置信区间：", stats.t.interval(0.95, 98, loc_A, scale_A))
 
-print("方差比的95%置信区间：", stats.f.interval(0.95, 50-1, 50-1, loc_B, scale_B))
+print("方差比的95%置信区间：", stats.f.interval(0.95, 50 - 1, 50 - 1, loc_B, scale_B))
+
+dataParzen = pandas.DataFrame(dataSet1)  # .sort_values(by=['mcv'])
+# print(dataParzen.head(50))
+
+# 方窗
+dataParzen2 = pandas.DataFrame(dataSet['alkphos'].head(200))
+dataList = dataParzen2['alkphos'].values.tolist()  # dataParzen['mcv'].values.tolist()
+# dataList = dataParzen['mcv'].values.tolist()
+
+print("begin ", len(dataList))
+
+dataSorted = sorted(dataList)
+
+
+# dataList.sort()
+# print(dataList)
+
+def parzenFang(x, h, N):
+    datasort = sorted(x)
+    b = 0
+    a = []
+    p = []
+
+    for i in range(0, len(x)):
+        for j in range(0, N):
+            if abs((x[j] - datasort[i]) / h) <= 1 / 2:
+                q = 1
+            else:
+                q = 0
+            b = q + b
+
+        a.append(b)
+        b = 0
+
+    for i in range(0, len(x)):
+        p.append(1 / (N * h) * a[i])
+
+    return p
+
+
+def parzenGauss(x, h, N):
+    datasort = sorted(x)
+    b = 0
+    h1 = h / math.sqrt(N)
+    p = []
+
+    for i in range(0, len(x)):
+        for j in range(0, N):
+            b = b + math.exp(((x[j] - datasort[i]) / h1) ** 2 / (-2)) / math.sqrt(2 * math.pi) / h1
+        p.append(b / N)  # p[i] = b / N
+        b = 0
+
+    return p
+
+
+p1 = parzenFang(dataList, 0.25, 100)
+p2 = parzenFang(dataList, 8, 100)
+p3 = parzenFang(dataList, 4, 100)
+
+p4 = parzenGauss(dataList, 0.25, 200)
+p5 = parzenGauss(dataList, 10, 200)
+p6 = parzenGauss(dataList, 20, 200)
+
+print(p1)
+print(len(p1))
+print(dataSorted)
+print(len(dataSorted))
+
+plt.subplot(2, 3, 1)
+plot(dataSorted, p1)
+plt.subplot(2, 3, 2)
+plot(dataSorted, p2)
+plt.subplot(2, 3, 3)
+plot(dataSorted, p3)
+
+plt.subplot(2, 3, 4)
+plot(dataSorted, p4)
+plt.subplot(2, 3, 5)
+plot(dataSorted, p5)
+plt.subplot(2, 3, 6)
+plot(dataSorted, p6)
+
+plt.show()
+
+

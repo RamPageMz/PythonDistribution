@@ -114,8 +114,8 @@ def parzenGauss(x, h, N):
 
 
 p1 = parzenFang(dataList, 0.25, 100)
-p2 = parzenFang(dataList, 8, 100)
-p3 = parzenFang(dataList, 4, 100)
+p2 = parzenFang(dataList, 4, 100)
+p3 = parzenFang(dataList, 8, 100)
 
 p4 = parzenGauss(dataList, 0.25, 200)
 p5 = parzenGauss(dataList, 10, 200)
@@ -143,3 +143,32 @@ plot(dataSorted, p6)
 plt.show()
 
 
+# kN 近邻
+def KN(N, x):
+    kn = math.sqrt(N)
+    print('kn', kn)
+    px = []
+    y = []
+
+    for i in range(0, len(x)):
+        for j in range(0, N):
+            y.append(abs(x[i] - x[j]))
+
+        y = sorted(y)
+        px.append(kn / N / (2 * y[i]))
+
+    return px
+
+
+k1 = KN(1, dataList)
+k2 = KN(16, dataList)
+k3 = KN(256, dataList)
+
+plt.subplot(1, 3, 1)
+plot(dataSorted, k1)
+plt.subplot(1, 3, 2)
+plot(dataSorted, k2)
+plt.subplot(1, 3, 3)
+plot(dataSorted, k3)
+
+plt.show()

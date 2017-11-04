@@ -181,12 +181,19 @@ def knn(X, kn, xleft, xright, xstep):
 print(max(dataList))
 print(min(dataList))
 
-k1 = knn(dataList, 10, min(dataList), max(dataList), (max(dataList)-min(dataList))/len(dataList))  # KN(1, dataList)
+k1 = knn(dataList, 10, min(dataList), max(dataList), (max(dataList) - min(dataList)) / len(dataList))  # KN(1, dataList)
+k2 = knn(dataList, 50, min(dataList), max(dataList), (max(dataList) - min(dataList)) / len(dataList))  # KN(1, dataList)
+k3 = knn(dataList, 100, min(dataList), max(dataList),(max(dataList) - min(dataList)) / len(dataList))  # KN(1, dataList)
 
 k1.pop()
+k2.pop()
+k3.pop()
 
 print(k1)
 print(len(k1))
 
-plot(dataSorted, k1)
+plot(dataSorted, k1, label='kn=10')
+plot(dataSorted, k2, label='kn=50')
+plot(dataSorted, k3, label='kn=100')
+plt.legend()
 plt.show()

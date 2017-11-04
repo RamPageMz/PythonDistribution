@@ -160,15 +160,33 @@ def KN(N, x):
     return px
 
 
-k1 = KN(1, dataList)
-k2 = KN(16, dataList)
-k3 = KN(256, dataList)
+def knn(X, kn, xleft, xright, xstep):
+    k = 1
+    px = []
+    x = xleft
+    while x < xright + xstep / 2:
+        eucl = []
+        for i in range(0, len(X)):
+            eucl.append(math.sqrt(((abs((x - X[i]))) ** 2)))
+        eucl = sorted(eucl)
+        ro = eucl[kn]
+        V = 2 * ro
+        px.append(kn / (len(X) * V))
+        k = k + 1
+        x = x + xstep
 
-plt.subplot(1, 3, 1)
+    return px
+
+
+print(max(dataList))
+print(min(dataList))
+
+k1 = knn(dataList, 10, min(dataList), max(dataList), (max(dataList)-min(dataList))/len(dataList))  # KN(1, dataList)
+
+k1.pop()
+
+print(k1)
+print(len(k1))
+
 plot(dataSorted, k1)
-plt.subplot(1, 3, 2)
-plot(dataSorted, k2)
-plt.subplot(1, 3, 3)
-plot(dataSorted, k3)
-
 plt.show()
